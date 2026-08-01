@@ -1,4 +1,4 @@
-# Systematic Trading Strategy Research Library
+# Systematic Strategy Lab
 
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)
@@ -172,7 +172,7 @@ If Yahoo Finance is unavailable, set `USE_DEMO_DATA = True` in the notebook's da
 ## Project structure
 
 ```text
-trading-strategy-research/
+systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
