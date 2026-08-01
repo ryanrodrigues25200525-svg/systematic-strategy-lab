@@ -1,4 +1,4 @@
-# Systematic Strategy Lab
+# 🧪 Systematic Strategy Lab
 
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)
@@ -13,7 +13,7 @@ This repository studies trading strategies as research questions—not as promis
 
 ---
 
-## Why this project exists
+## 💡 Why this project exists
 
 Trading strategies are easy to describe and easy to overstate. This project is designed to make the important details visible:
 
@@ -25,7 +25,7 @@ Trading strategies are easy to describe and easy to overstate. This project is d
 
 The goal is not to find one magical strategy. The goal is to build sound research habits and a reusable library of experiments.
 
-## At a glance
+## 📊 At a glance
 
 | Component | Current implementation |
 | --- | --- |
@@ -38,7 +38,7 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 | Metrics | Return, volatility, Sharpe, Sortino, drawdown, Calmar, win rate, turnover, trades |
 | Scope | Long-only, long/short, cross-sectional, multi-asset, factor, trend, and crisis-aware strategies |
 
-## Start here
+## 🚀 Start here
 
 If you are new to the project, read in this order:
 
@@ -60,11 +60,11 @@ Then explore the fund research:
 
 ---
 
-## Strategy index
+## 🗂️ Strategy index
 
 Every distinct fund strategy also has its own standalone notebook. The overview notebooks compare related ideas; the standalone notebooks go deep on one idea at a time.
 
-### AQR-style factor research
+### 📐 AQR-style factor research
 
 Public AQR material discusses systematic value, momentum, quality, and defensive styles. These notebooks use liquid ETF proxies and clearly label the implementation gap.
 
@@ -76,13 +76,13 @@ Public AQR material discusses systematic value, momentum, quality, and defensive
 | Defensive factor | [15 — AQR defensive factor](notebooks/15_aqr_defensive_factor.ipynb) | USMV |
 | Multi-style blend | [16 — AQR multi-style blend](notebooks/16_aqr_multi_style_blend.ipynb) | VTV + MTUM + QUAL + USMV |
 
-### Bridgewater-style risk balancing
+### 🌦️ Bridgewater-style risk balancing
 
 | Strategy | Notebook | Proxy |
 | --- | --- | --- |
 | All Weather risk balancing | [17 — Bridgewater All Weather proxy](notebooks/17_bridgewater_all_weather_proxy.ipynb) | SPY + TLT + GLD + DBC, inverse-volatility weights |
 
-### Man AHL-style trend following
+### 📈 Man AHL-style trend following
 
 | Strategy | Notebook | Rule |
 | --- | --- | --- |
@@ -92,7 +92,7 @@ Public AQR material discusses systematic value, momentum, quality, and defensive
 | Very slow trend | [21 — Man AHL very-slow trend](notebooks/21_man_ahl_very_slow_trend.ipynb) | 252-day time-series momentum |
 | Multi-speed blend | [22 — Man AHL multi-speed blend](notebooks/22_man_ahl_multi_speed_blend.ipynb) | Average of 21 / 63 / 126 / 252-day sleeves |
 
-### Winton-style trend research
+### 🌊 Winton-style trend research
 
 | Strategy | Notebook | Rule |
 | --- | --- | --- |
@@ -101,7 +101,7 @@ Public AQR material discusses systematic value, momentum, quality, and defensive
 
 ---
 
-## Research workflow
+## 🔬 Research workflow
 
 Every notebook follows the same reader-friendly structure:
 
@@ -113,7 +113,7 @@ Every notebook follows the same reader-friendly structure:
 6. **Robustness** — Do costs, parameters, other periods, or crisis windows change the conclusion?
 7. **Review** — What went well, what went wrong, and what should a beginner learn from it?
 
-## Current findings snapshot
+## 📌 Current findings snapshot
 
 These are the latest formal-test observations from the standalone fund notebooks. They are sample-specific proxy results, not fund returns.
 
@@ -128,25 +128,25 @@ These are the latest formal-test observations from the standalone fund notebooks
 
 For the full tables, cost checks, and stress-window diagnostics, read [FUND_STRATEGY_FINDINGS.md](FUND_STRATEGY_FINDINGS.md) and the individual notebooks.
 
-## Methodological standards
+## 🛡️ Methodological standards
 
-### No-lookahead execution
+### 🚫 No-lookahead execution
 
 Signals use information through the close of day `t`. The backtester shifts positions by one bar before applying the return from `t` to `t + 1`.
 
-### Realistic costs
+### 💸 Realistic costs
 
 Costs are charged on absolute exposure changes. Each notebook exposes the default 10 bps assumption and tests a range of higher and lower costs where turnover is important.
 
-### Chronological validation
+### 🗓️ Chronological validation
 
 The notebooks use chronological train, validation, and test periods. The final test period is not used to select parameters. Crisis windows are labeled as descriptive diagnostics because they are chosen after the fact.
 
-### Honest failure analysis
+### 🧾 Honest failure analysis
 
 An unsuccessful or cost-sensitive strategy is still a useful result. The notebooks do not hide whipsaws, missed rebounds, drawdowns, proxy limitations, or strategies that lose their appeal after costs.
 
-## Run the project locally
+## 💻 Run the project locally
 
 ```bash
 python -m venv .venv
@@ -169,7 +169,7 @@ python -m jupyter nbconvert \
 
 If Yahoo Finance is unavailable, set `USE_DEMO_DATA = True` in the notebook's data cell. The demo data is deterministic and exists only to validate the workflow—not to provide market evidence.
 
-## Project structure
+## 🗃️ Project structure
 
 ```text
 systematic-strategy-lab/
@@ -195,7 +195,7 @@ systematic-strategy-lab/
 └── README.md
 ```
 
-## Important limitations
+## ⚠️ Important limitations
 
 The fund notebooks are public-concept proxies, not exact replications. They generally do not model:
 
@@ -207,7 +207,7 @@ The fund notebooks are public-concept proxies, not exact replications. They gene
 
 The results should therefore be read as research on simplified rules under explicit assumptions.
 
-## Selected research sources
+## 📚 Selected research sources
 
 - [AQR — Understanding Factor Investing](https://funds.aqr.com/Insights/Strategies/Understanding-Factor-Investing)
 - [AQR — Investing with Style](https://www.aqr.com/insights/research/journal-article/investing-with-style)
@@ -222,6 +222,6 @@ The results should therefore be read as research on simplified rules under expli
 - [Frazzini and Pedersen — Betting Against Beta](https://www.nber.org/papers/w16601)
 - [Bailey et al. — The Probability of Backtest Overfitting](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2308659)
 
-## License and disclaimer
+## ⚖️ License and disclaimer
 
 This repository is intended for educational research and portfolio demonstration. It is not financial advice, an offer to buy or sell securities, or a guarantee of future performance. Before treating any result as investable research, replace the simplified data and cost assumptions with point-in-time, instrument-appropriate data and independent validation.
