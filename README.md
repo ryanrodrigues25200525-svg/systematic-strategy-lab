@@ -29,7 +29,7 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 24 runnable notebooks |
+| Research notebooks | 35 runnable notebooks |
 | Automated tests | 14 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
@@ -57,6 +57,7 @@ Then explore the fund research:
 - [Man AHL trend overview](notebooks/10_man_ahl_trend_following.ipynb)
 - [Winton trend and portable alpha overview](notebooks/11_winton_trend_and_portable_alpha.ipynb)
 - [Fund strategy findings report](FUND_STRATEGY_FINDINGS.md)
+- [Extended strategy findings report](EXTENDED_STRATEGY_FINDINGS.md)
 
 ---
 
@@ -99,6 +100,26 @@ Public AQR material discusses systematic value, momentum, quality, and defensive
 | Diversified trend ensemble | [23 — Winton trend ensemble](notebooks/23_winton_trend_ensemble.ipynb) | Multi-speed trend across six ETF markets |
 | Portable alpha | [24 — Winton portable alpha](notebooks/24_winton_portable_alpha.ipynb) | 50% SPY + 50% diversified trend |
 
+### 🧰 Extended hedge-fund and paper research
+
+These notebooks cover additional relative-value, market-neutral, factor, macro, event-driven, volatility, and portfolio-construction ideas. They are public-concept proxies—not proprietary fund replications.
+
+| Strategy | Notebook | Research family / proxy |
+| --- | --- | --- |
+| Pairs trading | [25 — Pairs trading](notebooks/25_pairs_trading_gatev.ipynb) | Gatev–Goetzmann–Rouwenhorst; KO / PEP spread |
+| Sector residual statistical arbitrage | [26 — Sector residual stat arb](notebooks/26_statistical_arbitrage_sector_residuals.ipynb) | Avellaneda–Lee; long–short sector residual proxy |
+| Betting against beta | [27 — Betting against beta](notebooks/27_betting_against_beta.ipynb) | Frazzini–Pedersen; low-beta / high-beta spread |
+| Value and momentum everywhere | [28 — Value and momentum](notebooks/28_value_momentum_everywhere.ipynb) | Asness–Moskowitz–Pedersen; cross-asset blend |
+| Dual momentum global macro | [29 — Dual momentum](notebooks/29_dual_momentum_global_macro.ipynb) | Antonacci; relative plus absolute momentum |
+| Halloween seasonality | [30 — Halloween effect](notebooks/30_halloween_seasonality.ipynb) | Jacobsen–Zhang; November–April exposure |
+| Minimum variance | [31 — Minimum variance](notebooks/31_minimum_variance_portfolio.ipynb) | Clarke–de Silva–Thorley; covariance-based weights |
+| Merger arbitrage | [32 — Merger arbitrage proxy](notebooks/32_merger_arbitrage_proxy.ipynb) | Event-driven ETF proxy: MNA |
+| Volatility risk premium | [33 — Volatility risk premium](notebooks/33_volatility_risk_premium_proxy.ipynb) | Carr–Wu; buy-write ETF proxy: PBP |
+| Convertible arbitrage | [34 — Convertible arbitrage proxy](notebooks/34_convertible_arbitrage_proxy.ipynb) | Liquid alternatives proxy: CWB |
+| Classic alternatives basket | [35 — Multi-strategy basket](notebooks/35_classic_alternatives_multi_strategy_basket.ipynb) | AQR DELTA-style diversified proxy basket |
+
+See [Extended Strategy Findings](EXTENDED_STRATEGY_FINDINGS.md) for the observed test-period results and the implementation caveats behind each proxy.
+
 ---
 
 ## 🔬 Research workflow
@@ -126,7 +147,7 @@ These are the latest formal-test observations from the standalone fund notebooks
 | Man AHL fast trend | Test Sharpe: **-0.15**; annualized turnover: **11.14** | Faster response can come with whipsaws and materially higher trading activity. |
 | Winton portable alpha | Test Sharpe: **0.80**; test drawdown: **-11.82%** | Adding an equity sleeve changed both return and crisis behavior versus trend alone. |
 
-For the full tables, cost checks, and stress-window diagnostics, read [FUND_STRATEGY_FINDINGS.md](FUND_STRATEGY_FINDINGS.md) and the individual notebooks.
+For the full tables, cost checks, and stress-window diagnostics, read [FUND_STRATEGY_FINDINGS.md](FUND_STRATEGY_FINDINGS.md), [EXTENDED_STRATEGY_FINDINGS.md](EXTENDED_STRATEGY_FINDINGS.md), and the individual notebooks.
 
 ## 🛡️ Methodological standards
 
@@ -176,7 +197,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  one standalone notebook per fund strategy
+│   └── 12–24  fund strategy proxies; 25–35 extended paper and hedge-fund families
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
@@ -221,6 +242,16 @@ The results should therefore be read as research on simplified rules under expli
 - [Moreira and Muir — Volatility-Managed Portfolios](https://doi.org/10.1111/jofi.12513)
 - [Frazzini and Pedersen — Betting Against Beta](https://www.nber.org/papers/w16601)
 - [Bailey et al. — The Probability of Backtest Overfitting](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2308659)
+- [Gatev, Goetzmann, and Rouwenhorst — Pairs Trading](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1095996)
+- [Avellaneda and Lee — Statistical Arbitrage](https://doi.org/10.1080/14697680903124632)
+- [Frazzini and Pedersen — Betting Against Beta](https://pages.stern.nyu.edu/~afrazzin/pdf/Betting%20Against%20Beta%20-%20Frazzini%20and%20Pedersen.pdf)
+- [Asness, Moskowitz, and Pedersen — Value and Momentum Everywhere](https://doi.org/10.1111/jofi.12021)
+- [Antonacci — Risk Premia Harvesting Through Dual Momentum](https://papers.ssrn.com/sol3/Papers.cfm?abstract_id=2042750)
+- [Jacobsen and Zhang — The Halloween Indicator](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2154873)
+- [Clarke, de Silva, and Thorley — Minimum-Variance Portfolios](https://doi.org/10.3905/jpm.2006.661366)
+- [Carr and Wu — Variance Risk Premiums](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1359527)
+- [AQR — Arbitrage Strategies](https://funds.aqr.com/Insights/Strategies/Arbitrage)
+- [AQR — DELTA Strategy](https://www.aqr.com/Insights/Research/Book/AQRs-DELTA-Strategy-A)
 
 ## ⚖️ License and disclaimer
 
