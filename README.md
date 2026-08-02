@@ -29,7 +29,7 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 40 runnable notebooks |
+| Research notebooks | 43 runnable notebooks |
 | Automated tests | 14 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
@@ -60,6 +60,7 @@ Then explore the fund research:
 - [Extended strategy findings report](EXTENDED_STRATEGY_FINDINGS.md)
 - [Reddit strategy audit findings](REDDIT_STRATEGY_FINDINGS.md)
 - [X/Twitter strategy audit findings](TWITTER_STRATEGY_FINDINGS.md)
+- [New research-paper strategy findings](PAPER_STRATEGY_FINDINGS.md)
 
 ---
 
@@ -145,6 +146,18 @@ These notebooks audit public X/Twitter strategy descriptions while labeling inco
 
 See [X/Twitter Strategy Audit Findings](TWITTER_STRATEGY_FINDINGS.md) for the claim-versus-reproduction summary.
 
+### 📚 New academic paper replications
+
+These notebooks add distinct paper-inspired tests for momentum crashes, 52-week-high momentum, and industry momentum. Each one includes the paper citation, a transparent ETF proxy, out-of-sample results, cost sensitivity, and a failure analysis.
+
+| Paper strategy | Notebook | Research question |
+| --- | --- | --- |
+| Risk-managed momentum | [41 — Volatility-managed momentum](notebooks/41_paper_risk_managed_momentum.ipynb) | Does scaling momentum exposure reduce crash risk? |
+| 52-week-high momentum | [42 — 52-week-high momentum](notebooks/42_paper_52_week_high_momentum.ipynb) | Does closeness to a 52-week high add information beyond 12–1 momentum? |
+| Industry momentum | [43 — Industry momentum](notebooks/43_paper_industry_momentum.ipynb) | Does momentum persist at the sector level? |
+
+See [New Research-Paper Strategy Findings](PAPER_STRATEGY_FINDINGS.md) for the claim-versus-reproduction summary.
+
 ---
 
 ## 🔬 Research workflow
@@ -222,7 +235,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–40 extended paper, hedge-fund, Reddit, and X/Twitter audits
+│   └── 12–24  fund strategy proxies; 25–43 extended paper, hedge-fund, Reddit, X/Twitter, and research-paper audits
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
@@ -284,6 +297,10 @@ The results should therefore be read as research on simplified rules under expli
 - [QuantifiedStrategies — MACD + RSI X post](https://x.com/QuantifiedStrat/status/2013527816940462540)
 - [Market Rebellion — Minervini SEPA X post](https://x.com/RebellioMarket/status/2018972895304894065)
 - [Concretum Research — volatility trading X post](https://x.com/ConcretumR/status/1952298941745172695)
+- [Barroso and Santa-Clara — Momentum Has Its Moments](https://doi.org/10.1016/j.jfineco.2014.11.010)
+- [Daniel and Moskowitz — Momentum Crashes](https://www.nber.org/papers/w20439)
+- [Liu, Liu, and Ma — 52-week-high momentum](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1364566)
+- [Moskowitz and Grinblatt — Do Industries Explain Momentum?](https://doi.org/10.1111/0022-1082.00146)
 
 ## ⚖️ License and disclaimer
 
