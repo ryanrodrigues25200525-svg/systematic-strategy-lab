@@ -29,7 +29,7 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 35 runnable notebooks |
+| Research notebooks | 37 runnable notebooks |
 | Automated tests | 14 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
@@ -58,6 +58,7 @@ Then explore the fund research:
 - [Winton trend and portable alpha overview](notebooks/11_winton_trend_and_portable_alpha.ipynb)
 - [Fund strategy findings report](FUND_STRATEGY_FINDINGS.md)
 - [Extended strategy findings report](EXTENDED_STRATEGY_FINDINGS.md)
+- [Reddit strategy audit findings](REDDIT_STRATEGY_FINDINGS.md)
 
 ---
 
@@ -119,6 +120,17 @@ These notebooks cover additional relative-value, market-neutral, factor, macro, 
 | Classic alternatives basket | [35 — Multi-strategy basket](notebooks/35_classic_alternatives_multi_strategy_basket.ipynb) | AQR DELTA-style diversified proxy basket |
 
 See [Extended Strategy Findings](EXTENDED_STRATEGY_FINDINGS.md) for the observed test-period results and the implementation caveats behind each proxy.
+
+### 💬 Reddit strategy audits
+
+These notebooks audit reproducible Reddit claims, including a high-Sharpe mean-reversion headline and a dual-momentum allocation idea. The claims are shown beside cost-aware, untouched-test results.
+
+| Strategy | Notebook | Audit focus |
+| --- | --- | --- |
+| IBS lower-band mean reversion | [36 — Reddit IBS mean reversion](notebooks/36_reddit_ibs_mean_reversion.ipynb) | Original four-rule setup versus a reported 2.11-Sharpe improved version |
+| Global dual momentum rotation | [37 — Reddit dual momentum](notebooks/37_reddit_dual_momentum.ipynb) | SPY / EFA relative momentum with a 200-day trend filter and TLT defense |
+
+See [Reddit Strategy Audit Findings](REDDIT_STRATEGY_FINDINGS.md) for the claim-versus-reproduction summary.
 
 ---
 
@@ -197,7 +209,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–35 extended paper and hedge-fund families
+│   └── 12–24  fund strategy proxies; 25–37 extended paper, hedge-fund, and Reddit audits
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
@@ -208,7 +220,8 @@ systematic-strategy-lab/
 │   ├── research.py       chronological comparison helpers
 │   └── strategies.py     single-asset signal builders
 ├── scripts/
-│   └── generate_fund_strategy_notebooks.py
+│   ├── generate_fund_strategy_notebooks.py
+│   └── create_reddit_notebooks.py
 ├── tests/
 │   └── test_backtest.py
 ├── FUND_STRATEGY_FINDINGS.md
@@ -252,6 +265,9 @@ The results should therefore be read as research on simplified rules under expli
 - [Carr and Wu — Variance Risk Premiums](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1359527)
 - [AQR — Arbitrage Strategies](https://funds.aqr.com/Insights/Strategies/Arbitrage)
 - [AQR — DELTA Strategy](https://www.aqr.com/Insights/Research/Book/AQRs-DELTA-Strategy-A)
+- [Reddit — IBS mean-reversion strategy](https://www.reddit.com/r/algotrading/comments/1cwsco8/a_mean_reversion_strategy_with_211_sharpe/)
+- [Reddit — leveraged dual momentum backtest](https://www.reddit.com/r/LETFs/comments/1jj4tad/leveraged_dual_momentum_backtest/)
+- [Reddit — discussion of realistic Sharpe ratios](https://www.reddit.com/r/quant/comments/1u16w3p/are_longterm_sharpe_ratios_above_3_and_30_annual/)
 
 ## ⚖️ License and disclaimer
 
