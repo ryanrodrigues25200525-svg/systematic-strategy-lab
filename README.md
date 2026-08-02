@@ -29,7 +29,7 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 37 runnable notebooks |
+| Research notebooks | 40 runnable notebooks |
 | Automated tests | 14 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
@@ -59,6 +59,7 @@ Then explore the fund research:
 - [Fund strategy findings report](FUND_STRATEGY_FINDINGS.md)
 - [Extended strategy findings report](EXTENDED_STRATEGY_FINDINGS.md)
 - [Reddit strategy audit findings](REDDIT_STRATEGY_FINDINGS.md)
+- [X/Twitter strategy audit findings](TWITTER_STRATEGY_FINDINGS.md)
 
 ---
 
@@ -131,6 +132,18 @@ These notebooks audit reproducible Reddit claims, including a high-Sharpe mean-r
 | Global dual momentum rotation | [37 — Reddit dual momentum](notebooks/37_reddit_dual_momentum.ipynb) | SPY / EFA relative momentum with a 200-day trend filter and TLT defense |
 
 See [Reddit Strategy Audit Findings](REDDIT_STRATEGY_FINDINGS.md) for the claim-versus-reproduction summary.
+
+### 🐦 X/Twitter strategy audits
+
+These notebooks audit public X/Twitter strategy descriptions while labeling incomplete rules and proxy implementations clearly.
+
+| Strategy | Notebook | Audit focus |
+| --- | --- | --- |
+| MACD + RSI mean reversion | [38 — X MACD + RSI on SMH](notebooks/38_x_macd_rsi_smh.ipynb) | Public 73% win-rate claim versus a transparent approximation |
+| Minervini SEPA trend template | [39 — X Minervini SEPA proxy](notebooks/39_x_minervini_sepa_proxy.ipynb) | Technical moving-average and 52-week-range subset across ETFs |
+| Filtered volatility risk premium | [40 — X volatility-risk-premium proxy](notebooks/40_x_volatility_risk_premium_proxy.ipynb) | VIX/VIX3M filters, dynamic sizing, and short-volatility stress tests |
+
+See [X/Twitter Strategy Audit Findings](TWITTER_STRATEGY_FINDINGS.md) for the claim-versus-reproduction summary.
 
 ---
 
@@ -209,7 +222,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–37 extended paper, hedge-fund, and Reddit audits
+│   └── 12–24  fund strategy proxies; 25–40 extended paper, hedge-fund, Reddit, and X/Twitter audits
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
@@ -268,6 +281,9 @@ The results should therefore be read as research on simplified rules under expli
 - [Reddit — IBS mean-reversion strategy](https://www.reddit.com/r/algotrading/comments/1cwsco8/a_mean_reversion_strategy_with_211_sharpe/)
 - [Reddit — leveraged dual momentum backtest](https://www.reddit.com/r/LETFs/comments/1jj4tad/leveraged_dual_momentum_backtest/)
 - [Reddit — discussion of realistic Sharpe ratios](https://www.reddit.com/r/quant/comments/1u16w3p/are_longterm_sharpe_ratios_above_3_and_30_annual/)
+- [QuantifiedStrategies — MACD + RSI X post](https://x.com/QuantifiedStrat/status/2013527816940462540)
+- [Market Rebellion — Minervini SEPA X post](https://x.com/RebellioMarket/status/2018972895304894065)
+- [Concretum Research — volatility trading X post](https://x.com/ConcretumR/status/1952298941745172695)
 
 ## ⚖️ License and disclaimer
 
