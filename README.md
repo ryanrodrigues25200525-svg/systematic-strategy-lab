@@ -29,7 +29,7 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 43 runnable notebooks |
+| Research notebooks | 46 runnable notebooks |
 | Automated tests | 14 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
@@ -61,6 +61,7 @@ Then explore the fund research:
 - [Reddit strategy audit findings](REDDIT_STRATEGY_FINDINGS.md)
 - [X/Twitter strategy audit findings](TWITTER_STRATEGY_FINDINGS.md)
 - [New research-paper strategy findings](PAPER_STRATEGY_FINDINGS.md)
+- [Original strategy findings](ORIGINAL_STRATEGY_FINDINGS.md)
 
 ---
 
@@ -158,6 +159,18 @@ These notebooks add distinct paper-inspired tests for momentum crashes, 52-week-
 
 See [New Research-Paper Strategy Findings](PAPER_STRATEGY_FINDINGS.md) for the claim-versus-reproduction summary.
 
+### 🧠 Original strategy experiments
+
+These notebooks combine ideas from the earlier paper, fund, Reddit, and X/Twitter research into new, explicitly labeled hypotheses. They are compared against simpler baselines and include crisis diagnostics so the library does not reward complexity by default.
+
+| Original strategy | Notebook | Ingredients |
+| --- | --- | --- |
+| Adaptive regime ensemble | [44 — Adaptive regime ensemble](notebooks/44_adaptive_regime_ensemble.ipynb) | Momentum + 52-week-high proximity + trend gate + inverse volatility + defensive fallback |
+| Crisis-aware IBS mean reversion | [45 — Crisis-aware IBS](notebooks/45_crisis_aware_ibs_mean_reversion.ipynb) | IBS mean reversion + 200-day trend filter + VIX circuit breakers |
+| Signal-consensus target-risk allocation | [46 — Signal-consensus allocation](notebooks/46_signal_consensus_target_risk.ipynb) | Fast/slow trend agreement + momentum + high-volatility selectivity |
+
+See [Original Strategy Findings](ORIGINAL_STRATEGY_FINDINGS.md) for the out-of-sample results and tradeoffs.
+
 ---
 
 ## 🔬 Research workflow
@@ -235,7 +248,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–43 extended paper, hedge-fund, Reddit, X/Twitter, and research-paper audits
+│   └── 12–24  fund strategy proxies; 25–46 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, and original strategy audits
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
@@ -301,6 +314,8 @@ The results should therefore be read as research on simplified rules under expli
 - [Daniel and Moskowitz — Momentum Crashes](https://www.nber.org/papers/w20439)
 - [Liu, Liu, and Ma — 52-week-high momentum](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1364566)
 - [Moskowitz and Grinblatt — Do Industries Explain Momentum?](https://doi.org/10.1111/0022-1082.00146)
+- [Clare, Seaton, Smith, and Thomas — The Trend Is Our Friend](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2265693)
+- [Goulding, Harvey, and Mazzoleni — Momentum Turning Points](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3489539)
 
 ## ⚖️ License and disclaimer
 
