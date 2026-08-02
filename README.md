@@ -29,7 +29,7 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 46 runnable notebooks |
+| Research notebooks | 49 runnable notebooks |
 | Automated tests | 14 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
@@ -49,6 +49,9 @@ If you are new to the project, read in this order:
 5. [Paper strategy replications](notebooks/05_paper_strategy_replications.ipynb)
 6. [Regime and crisis strategies](notebooks/06_regime_and_crisis_strategies.ipynb)
 7. [Additional paper replications](notebooks/07_additional_paper_replications.ipynb)
+8. [Capstone multi-strategy portfolio](notebooks/47_capstone_multi_strategy_portfolio.ipynb)
+9. [Backtest-quality audit](notebooks/48_backtest_quality_audit.ipynb)
+10. [Stock-level profitability factor](notebooks/49_stock_level_profitability_factor.ipynb)
 
 Then explore the fund research:
 
@@ -62,6 +65,7 @@ Then explore the fund research:
 - [X/Twitter strategy audit findings](TWITTER_STRATEGY_FINDINGS.md)
 - [New research-paper strategy findings](PAPER_STRATEGY_FINDINGS.md)
 - [Original strategy findings](ORIGINAL_STRATEGY_FINDINGS.md)
+- [Research map and beginner learning guide](RESEARCH_MAP.md)
 
 ---
 
@@ -171,6 +175,18 @@ These notebooks combine ideas from the earlier paper, fund, Reddit, and X/Twitte
 
 See [Original Strategy Findings](ORIGINAL_STRATEGY_FINDINGS.md) for the out-of-sample results and tradeoffs.
 
+### 🏛️ Capstone portfolio, audit, and fundamentals
+
+These final notebooks turn the collection into a portfolio-ready research project: one capstone portfolio, one notebook dedicated to research integrity, and one historical fundamentals example.
+
+| Deliverable | Notebook | What it demonstrates |
+| --- | --- | --- |
+| Capstone multi-strategy portfolio | [47 — Capstone portfolio](notebooks/47_capstone_multi_strategy_portfolio.ipynb) | Correlation matrix, rolling Sharpe, risk contribution, drawdowns, SPY/60-40 comparison, and before/after-cost results |
+| Backtest-quality audit | [48 — Quality audit](notebooks/48_backtest_quality_audit.ipynb) | Look-ahead checks, bootstrap intervals, parameter stability, factor exposure, turnover/slippage, and a clearly labeled PBO-style warning proxy |
+| Stock-level profitability factor | [49 — Profitability factor](notebooks/49_stock_level_profitability_factor.ipynb) | Historical accounting-based RMW factor construction, point-in-time formation logic, cost scenarios, and limitations |
+
+Use the [Research Map and Learning Guide](RESEARCH_MAP.md) to see how each anomaly connects to a source, rule, implementation, result, and limitation.
+
 ---
 
 ## 🔬 Research workflow
@@ -248,7 +264,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–46 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, and original strategy audits
+│   └── 12–24  fund strategy proxies; 25–49 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, and fundamentals notebooks
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
