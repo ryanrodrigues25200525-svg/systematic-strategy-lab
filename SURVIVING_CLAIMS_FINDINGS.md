@@ -2,7 +2,11 @@
 
 Notebook 54 falsified the library's most promising result. This round audits the four claims that survived it, and answers the question a reader should ask: **is anything here true?**
 
-> Educational research only. Not financial advice. This is the project's closing verdict, not a recommendation.
+> Educational research only. Not financial advice.
+
+> ## 🧭 Superseded in part
+>
+> Notebooks 56 and 57 re-tested these mechanisms on a century of the original stock-level portfolios and changed the conclusion from "everything is beta" to **"the anomalies are real, the observation window is the problem"**. Read [FACTOR_REPLICATION_FINDINGS.md](FACTOR_REPLICATION_FINDINGS.md) after this document: the attribution findings here stand, but they are not the whole story.
 
 ## 📊 The four claims
 

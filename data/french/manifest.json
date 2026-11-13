@@ -1,0 +1,82 @@
+{
+  "factors_monthly": {
+    "columns": 7,
+    "crsp_vintage": "202609",
+    "first_month": "1963-07-01",
+    "last_month": "2026-09-01",
+    "retrieved_utc": "2026-11-13T23:05:38+00:00",
+    "rows": 759,
+    "sha256": "cef764c29f548294adbc6bbadfa3a28f5fba695f0bde89c29d1f78d102289e03",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_5_Factors_2x3_CSV.zip + F-F_Momentum_Factor_CSV.zip"
+  },
+  "industries_49_value": {
+    "columns": 49,
+    "crsp_vintage": "202609",
+    "first_month": "1926-07-01",
+    "last_month": "2026-09-01",
+    "retrieved_utc": "2026-11-13T22:59:11+00:00",
+    "rows": 1203,
+    "sha256": "fcc87ae6f63b3a362e8f990483cf9d8e735e2d35818d438af29f2dc0b018e5be",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_CSV.zip"
+  },
+  "momentum_12_2_value": {
+    "columns": 10,
+    "crsp_vintage": "202609",
+    "first_month": "1927-01-01",
+    "last_month": "2026-09-01",
+    "retrieved_utc": "2026-11-13T22:59:06+00:00",
+    "rows": 1197,
+    "sha256": "1cafe647f3c84abe931ec72e0a2e24e6b5d82f12b11dc993c5c425f39cbf3781",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/10_Portfolios_Prior_12_2_CSV.zip"
+  },
+  "reversal_1_0_value": {
+    "columns": 10,
+    "crsp_vintage": "202609",
+    "first_month": "1926-02-01",
+    "last_month": "2026-09-01",
+    "retrieved_utc": "2026-11-13T22:59:07+00:00",
+    "rows": 1208,
+    "sha256": "a4437a70a60c47aa11b2460f51de1d406cc45df0ffb5146010a218b3ea395f87",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/10_Portfolios_Prior_1_0_CSV.zip"
+  },
+  "reversal_60_13_value": {
+    "columns": 10,
+    "crsp_vintage": "202609",
+    "first_month": "1931-01-01",
+    "last_month": "2026-09-01",
+    "retrieved_utc": "2026-11-13T22:59:07+00:00",
+    "rows": 1149,
+    "sha256": "9883aed037f08173856b9ccfcd7f28f60f7fa464bb9a6bd156f6e4aac0ff1787",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/10_Portfolios_Prior_60_13_CSV.zip"
+  },
+  "size_investment_5x5_value": {
+    "columns": 25,
+    "crsp_vintage": "202609",
+    "first_month": "1963-07-01",
+    "last_month": "2026-09-01",
+    "retrieved_utc": "2026-11-13T22:59:10+00:00",
+    "rows": 759,
+    "sha256": "35faa8d88dfdc25e6e479b76e6e6a2b139edd85cb4c2a70575118513dab2658d",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/25_Portfolios_ME_Inv_5x5_CSV.zip"
+  },
+  "size_profitability_5x5_value": {
+    "columns": 25,
+    "crsp_vintage": "202609",
+    "first_month": "1963-07-01",
+    "last_month": "2026-09-01",
+    "retrieved_utc": "2026-11-13T22:59:09+00:00",
+    "rows": 759,
+    "sha256": "a034baf7f59d9565b1faa7305fa1a3d72a3b085c82350be96c7721edf32a3bb6",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/25_Portfolios_ME_OP_5x5_CSV.zip"
+  },
+  "size_value_5x5_value": {
+    "columns": 25,
+    "crsp_vintage": "202609",
+    "first_month": "1926-07-01",
+    "last_month": "2026-09-01",
+    "retrieved_utc": "2026-11-13T22:59:08+00:00",
+    "rows": 1203,
+    "sha256": "5c80303fa79c85af5a933ca3180ee45a6f6a0046a99a0b49455454f3244e8cbd",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/25_Portfolios_5x5_CSV.zip"
+  }
+}

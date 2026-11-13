@@ -181,9 +181,9 @@ def deflated_sharpe_ratio(
     *,
     trials: int,
     n_observations: int,
-    annualization: int = 252,
+    annualization: int,
     skewness: float = 0.0,
-    kurtosis: float = 3.0,
+    excess_kurtosis: float = 0.0,
     sharpe_variance: float | None = None,
 ) -> float:
     """Bailey–Lopez de Prado deflated Sharpe ratio, as a probability.
@@ -192,6 +192,14 @@ def deflated_sharpe_ratio(
     units, because the sampling theory applies to the non-annualised statistic.
     Mixing the two units makes the deflation look either toothless or brutal, so
     the conversion happens here rather than at the call site.
+
+    ``annualization`` is therefore mandatory: 252 for daily returns, 12 for
+    monthly. It has no default on purpose — a default of 252 applied to monthly
+    data silently divides the Sharpe ratio by sqrt(252) instead of sqrt(12) and
+    turns a significant result into an unremarkable one.
+
+    ``excess_kurtosis`` follows the pandas/scipy convention (normal = 0); the
+    closed form uses raw kurtosis internally.
 
     The observed Sharpe ratio is compared against the Sharpe ratio you would
     *expect* the best of ``trials`` independent strategies to achieve by chance.
@@ -206,8 +214,8 @@ def deflated_sharpe_ratio(
         raise ValueError("trials must be at least 1")
     if n_observations < 3:
         raise ValueError("n_observations must be at least 3")
-    if kurtosis < 1.0:
-        raise ValueError("kurtosis must be at least 1")
+    if excess_kurtosis < -2.0:
+        raise ValueError("excess_kurtosis below -2 implies a raw kurtosis below 1")
     if annualization < 1:
         raise ValueError("annualization must be positive")
 
@@ -226,7 +234,8 @@ def deflated_sharpe_ratio(
         lower = normal.inv_cdf(1.0 - 1.0 / (trials * np.e))
         benchmark = np.sqrt(variance) * ((1.0 - EULER_MASCHERONI) * upper + EULER_MASCHERONI * lower)
 
-    denominator = np.sqrt(1.0 - skewness * per_observation + (kurtosis - 1.0) / 4.0 * per_observation**2)
+    raw_kurtosis = excess_kurtosis + 3.0
+    denominator = np.sqrt(1.0 - skewness * per_observation + (raw_kurtosis - 1.0) / 4.0 * per_observation**2)
     if not np.isfinite(denominator) or denominator <= 0.0:
         raise ValueError("Return distribution makes the deflation undefined")
     statistic = (per_observation - benchmark) * np.sqrt(n_observations - 1) / denominator
@@ -241,3 +250,35 @@ def annualized_sharpe(returns: pd.Series, *, annualization: int = 252) -> float:
         raise ValueError("Need at least two observations")
     deviation = float(clean.std(ddof=1))
     return 0.0 if deviation == 0.0 else float(clean.mean() / deviation * np.sqrt(annualization))
+
+
+def minimum_detectable_sharpe(
+    n_observations: int,
+    *,
+    annualization: int,
+    alpha: float = 0.05,
+    power: float = 0.8,
+) -> float:
+    """Smallest annualised Sharpe ratio a sample of this length can detect.
+
+    Uses the large-sample standard error of a Sharpe estimate, ``sqrt(1 / years)``,
+    which ignores the ``1 + SR^2 / 2`` correction — negligible below a Sharpe of
+    about 1 and conservative above it. ``alpha`` is two-sided.
+
+    This is the number that explains a research library full of "inconclusive":
+    a 3.7-year test window cannot resolve anything below a Sharpe of about 1.3,
+    no matter how carefully the rule is specified.
+    """
+
+    if n_observations < 2:
+        raise ValueError("n_observations must be at least 2")
+    if annualization < 1:
+        raise ValueError("annualization must be positive")
+    if not 0.0 < alpha < 1.0:
+        raise ValueError("alpha must be in (0, 1)")
+    if not 0.0 < power < 1.0:
+        raise ValueError("power must be in (0, 1)")
+
+    years = n_observations / annualization
+    normal = NormalDist()
+    return float((normal.inv_cdf(1.0 - alpha / 2.0) + normal.inv_cdf(power)) / np.sqrt(years))

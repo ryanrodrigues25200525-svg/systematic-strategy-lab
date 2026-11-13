@@ -23,6 +23,14 @@ from .macro_regimes import (
     inflation_rotation_weights,
     term_structure_tilt_weights,
 )
+from .french_data import (
+    DATASETS,
+    FrenchPortfolios,
+    load_french_factors,
+    load_french_portfolios,
+    parse_french_csv,
+    spread_returns,
+)
 from .factor_audit import (
     alpha_beta,
     annualized_sharpe,
@@ -101,6 +109,13 @@ __all__ = [
     "beta_adjusted_returns",
     "bootstrap_pvalue",
     "deflated_sharpe_ratio",
+    "minimum_detectable_sharpe",
+    "DATASETS",
+    "FrenchPortfolios",
+    "load_french_factors",
+    "load_french_portfolios",
+    "parse_french_csv",
+    "spread_returns",
     "stationary_block_bootstrap",
     "credit_regime_weights",
     "trend_gate_weights",

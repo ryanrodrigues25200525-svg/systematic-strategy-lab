@@ -29,9 +29,9 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 55 runnable notebooks |
-| Automated tests | 56 passing tests |
-| Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
+| Research notebooks | 57 runnable notebooks |
+| Automated tests | 70 passing tests |
+| Data | Adjusted Yahoo Finance prices plus a committed Ken French factor snapshot (1926-2026), with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
 | Default cost | 10 basis points per unit of absolute exposure change |
 | Validation | Chronological train / validation / untouched test split |
@@ -70,7 +70,8 @@ Then explore the fund research:
 - [Macro regime findings](MACRO_REGIME_FINDINGS.md)
 - [Calendar effect findings](CALENDAR_EFFECTS_FINDINGS.md)
 - [Residual momentum stress test](RM_STRESS_TEST_FINDINGS.md)
-- [Surviving claims audit — the closing verdict](SURVIVING_CLAIMS_FINDINGS.md)
+- [Surviving claims audit](SURVIVING_CLAIMS_FINDINGS.md)
+- [Factor replication — the revised closing verdict](FACTOR_REPLICATION_FINDINGS.md)
 - [Research map and beginner learning guide](RESEARCH_MAP.md)
 
 ---
@@ -251,6 +252,17 @@ The stress test killed the most exciting result. This notebook audits the four c
 
 See [Surviving Claims Findings](SURVIVING_CLAIMS_FINDINGS.md) for the closing verdict: the library contains one durable effect — equity and duration beta are real, and de-risking on trend buys drawdown reduction at a fair price.
 
+### 🎩 Paper-scale replication: a century of data
+
+The ETF tests in this library could not settle anything. These notebooks use the portfolios the original papers used — Ken French decile and quintile sorts from 1926 — snapshotted to `data/french/` with the CRSP vintage and a SHA-256 digest.
+
+| Deliverable | Notebook | What it demonstrates |
+| --- | --- | --- |
+| Momentum at paper scale | [56 — Momentum, 1927-2026](notebooks/56_momentum_at_paper_scale.ipynb) | 13.77%/yr long-short with t = 4.98, a −95.6% drawdown, beta −0.67, and volatility management taking Sharpe from 0.50 to 0.73 |
+| Reversal, value and quality at scale | [57 — Reversal, value, quality](notebooks/57_reversal_value_quality_at_scale.ipynb) | Five mechanisms with t between 2.2 and 4.4 over 100 years, a quality composite that replicates notebook 51, and zero of six clearing t = 3 after 2010 |
+
+See [Factor Replication Findings](FACTOR_REPLICATION_FINDINGS.md) for the revised verdict: the anomalies are real, the window is the problem, and a 943-day test cannot detect a Sharpe below 1.45.
+
 Use the [Research Map and Learning Guide](RESEARCH_MAP.md) to see how each anomaly connects to a source, rule, implementation, result, and limitation.
 
 ---
@@ -283,6 +295,7 @@ These are the latest formal-test observations from the standalone fund notebooks
 | Residual momentum | Initial test Sharpe **0.99** versus **0.61** — then failed its audit: alpha t = 1.12, beta-adjusted Sharpe -0.08, grid p = 0.25 | A test-window Sharpe ratio is the weakest form of evidence; decompose for beta and correct for the search. |
 | Macro regime filters | Credit filter **+0.95 Sharpe in 2007–2014** but **0.08 in 2022–2025** | A crisis detector is not an allocation rule; judge filters against their own unfiltered control. |
 | Calendar effects | Turn-of-month **+3.3 bps/day premium, t = 1.03**, and decimated by 24 units of turnover | A conditional mean is not an edge; costs scale with turnover, not with time invested. |
+| Factor replication (1926-2026) | Momentum long-short **t = 4.98**, reversal **t = 4.37**, value **t = 3.28** — all dormant after 2010 | The anomalies are real; a 17-year window cannot resolve them and a 943-day window cannot detect a Sharpe below 1.45. |
 | Trend gate vs buy & hold | Alpha **3.40%/yr (t = 2.13)** and drawdown **-25% vs -55%**, but it loses on return in 29 of 32 years and its grid p = 0.12 | Timing buys drawdown reduction; it does not beat a multiple-testing bar. |
 | ERC / equal weight "alpha" | 3.73%/yr (t = 2.88) becomes **1.83% (t = 1.93)** once duration is a second factor | Always ask *which* benchmark; a bond-heavy book looks skilful against equities alone. |
 
@@ -336,7 +349,8 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–55 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, risk-allocation, equity-factor, macro-regime, calendar, and falsification notebooks
+│   └── 12–24  fund strategy proxies; 25–57 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, risk-allocation, equity-factor, macro-regime, calendar, falsification, and paper-scale replication notebooks
+├── data/french/          committed Ken French snapshot + manifest (vintage, SHA-256)
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
@@ -345,7 +359,8 @@ systematic-strategy-lab/
 │   ├── plots.py          reusable chart helpers
 │   ├── equity_factors.py residual momentum, long-horizon reversal, quality composite
 │   ├── calendar_effects.py turn-of-month, holiday, FOMC, and weekday masks
-│   ├── factor_audit.py   bootstrap, beta decomposition, deflated Sharpe
+│   ├── factor_audit.py   bootstrap, beta decomposition, deflated Sharpe, power
+│   ├── french_data.py    Ken French loader, snapshot cache, long-short spreads
 │   ├── macro_regimes.py  credit, term-structure, and inflation regime rules
 │   ├── portfolio.py      portfolio weights and portfolio backtests
 │   ├── risk.py           covariance shrinkage, ERC, HRP, and diversification methods
