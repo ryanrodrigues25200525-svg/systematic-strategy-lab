@@ -59,6 +59,7 @@ flowchart LR
 | Risk-based allocation | Covariance shrinkage, equal risk contribution, hierarchical clustering, maximum diversification | [50](notebooks/50_risk_based_allocation.ipynb) | A 10-ETF universe is too small for these methods to show their designed advantage; equal weight is the mandatory control |
 | Equity-factor mechanisms | Residual momentum, long-horizon reversal, quality composite construction | [51](notebooks/51_equity_factor_momentum_reversal_quality.ipynb) | Sector ETFs are a coarse substitute for stock-level deciles, and the quality test uses published factor returns rather than holdings |
 | Macro regimes | Credit-leadership, term-structure and inflation rotation filters built from price ratios | [52](notebooks/52_macro_regime_signals.ipynb) | A price ratio is not a spread, a yield curve, or an inflation print; a filter must be judged against its own unfiltered control |
+| Calendar effects | Turn-of-month, pre-holiday, pre-FOMC and weekday masks with t-statistics | [53](notebooks/53_calendar_effects.ipynb) | Effects measured on one asset with daily closes; small samples give almost no power, and cash drag plus turnover usually dominate |
 
 ## 🧑‍🎓 Suggested beginner learning path
 

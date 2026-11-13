@@ -7,6 +7,15 @@ from .backtest import (
     split_time_series,
     volatility_target_position,
 )
+from .calendar_effects import (
+    day_of_week_mask,
+    nyse_holidays,
+    positions_from_return_mask,
+    pre_fomc_mask,
+    pre_holiday_mask,
+    scheduled_fomc_dates,
+    turn_of_month_mask,
+)
 from .data import load_price_data, load_price_panel, make_demo_ohlcv
 from .macro_regimes import (
     credit_regime_weights,
@@ -79,6 +88,13 @@ __all__ = [
     "equal_weight_weights",
     "erc_weights",
     "credit_regime_weights",
+    "day_of_week_mask",
+    "nyse_holidays",
+    "positions_from_return_mask",
+    "pre_fomc_mask",
+    "pre_holiday_mask",
+    "scheduled_fomc_dates",
+    "turn_of_month_mask",
     "inflation_rotation_weights",
     "term_structure_tilt_weights",
     "cross_sectional_momentum_score",
