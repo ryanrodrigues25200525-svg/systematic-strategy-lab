@@ -8,6 +8,13 @@ from .backtest import (
     volatility_target_position,
 )
 from .data import load_price_data, load_price_panel, make_demo_ohlcv
+from .equity_factors import (
+    cross_sectional_momentum_score,
+    cross_sectional_momentum_weights_monthly,
+    long_term_reversal_weights,
+    quality_composite_returns,
+    residual_momentum_weights,
+)
 from .portfolio import (
     PortfolioBacktestResult,
     cross_sectional_momentum_weights,
@@ -66,6 +73,11 @@ __all__ = [
     "equal_risk_contribution_weights",
     "equal_weight_weights",
     "erc_weights",
+    "cross_sectional_momentum_score",
+    "cross_sectional_momentum_weights_monthly",
+    "long_term_reversal_weights",
+    "quality_composite_returns",
+    "residual_momentum_weights",
     "fifty_two_week_high_weights",
     "hierarchical_risk_parity_weights",
     "hierarchical_risk_parity_weights_from_cov",

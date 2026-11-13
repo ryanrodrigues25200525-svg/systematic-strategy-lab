@@ -29,8 +29,8 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 50 runnable notebooks |
-| Automated tests | 25 passing tests |
+| Research notebooks | 51 runnable notebooks |
+| Automated tests | 32 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
 | Default cost | 10 basis points per unit of absolute exposure change |
@@ -66,6 +66,7 @@ Then explore the fund research:
 - [New research-paper strategy findings](PAPER_STRATEGY_FINDINGS.md)
 - [Original strategy findings](ORIGINAL_STRATEGY_FINDINGS.md)
 - [Risk-based allocation findings](RISK_ALLOCATION_FINDINGS.md)
+- [Equity factor findings](EQUITY_FACTOR_FINDINGS.md)
 - [Research map and beginner learning guide](RESEARCH_MAP.md)
 
 ---
@@ -196,6 +197,16 @@ These notebooks build portfolios from the covariance matrix rather than from ret
 
 See [Risk-Based Allocation Findings](RISK_ALLOCATION_FINDINGS.md) for the test-period table, stress windows, and negative results.
 
+### 🧬 Equity factors: residual momentum, reversal, and quality
+
+These notebooks test factor mechanisms the library did not yet cover: momentum estimated on market residuals, long-horizon overreaction reversal, and a quality composite built from published Fama–French factor returns.
+
+| Factor rule | Notebook | Research question |
+| --- | --- | --- |
+| Residual momentum, 3-year reversal, quality composite | [51 — Equity factors](notebooks/51_equity_factor_momentum_reversal_quality.ipynb) | Does stripping market beta from momentum help, does overreaction reversal survive in ETFs, and does adding the investment leg to profitability improve quality? |
+
+See [Equity Factor Findings](EQUITY_FACTOR_FINDINGS.md) for the residual-momentum result, the sign error that was caught, and the decaying quality premium.
+
 Use the [Research Map and Learning Guide](RESEARCH_MAP.md) to see how each anomaly connects to a source, rule, implementation, result, and limitation.
 
 ---
@@ -225,6 +236,7 @@ These are the latest formal-test observations from the standalone fund notebooks
 | Man AHL fast trend | Test Sharpe: **-0.15**; annualized turnover: **11.14** | Faster response can come with whipsaws and materially higher trading activity. |
 | Winton portable alpha | Test Sharpe: **0.80**; test drawdown: **-11.82%** | Adding an equity sleeve changed both return and crisis behavior versus trend alone. |
 | Risk-based allocation | Best covariance method: **0.65 Sharpe** versus **0.75** for equal weight | Estimation error, not the allocation formula, is often the binding constraint. |
+| Residual momentum | Test Sharpe **0.91** versus **0.64** for plain 12–1 momentum, with 49% holding overlap | Removing market beta from a momentum signal changes which stocks it holds, not just how much risk it takes. |
 
 For the full tables, cost checks, and stress-window diagnostics, read [FUND_STRATEGY_FINDINGS.md](FUND_STRATEGY_FINDINGS.md), [EXTENDED_STRATEGY_FINDINGS.md](EXTENDED_STRATEGY_FINDINGS.md), and the individual notebooks.
 
@@ -276,13 +288,14 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–50 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, and risk-allocation notebooks
+│   └── 12–24  fund strategy proxies; 25–51 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, risk-allocation, and equity-factor notebooks
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
 │   ├── fund_strategies.py fund-specific transparent trend proxy
 │   ├── metrics.py        consistent performance metrics
 │   ├── plots.py          reusable chart helpers
+│   ├── equity_factors.py residual momentum, long-horizon reversal, quality composite
 │   ├── portfolio.py      portfolio weights and portfolio backtests
 │   ├── risk.py           covariance shrinkage, ERC, HRP, and diversification methods
 │   ├── research.py       chronological comparison helpers

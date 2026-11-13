@@ -57,6 +57,7 @@ flowchart LR
 | Research-quality audit | Timing, bootstrap uncertainty, parameter stability, factor exposure | [48](notebooks/48_backtest_quality_audit.ipynb) | The PBO-style cell is a warning proxy, not a formal PBO estimate |
 | Fundamentals | Historical stock-level profitability construction | [49](notebooks/49_stock_level_profitability_factor.ipynb) | Published factor data does not expose holdings, borrow, or exact turnover |
 | Risk-based allocation | Covariance shrinkage, equal risk contribution, hierarchical clustering, maximum diversification | [50](notebooks/50_risk_based_allocation.ipynb) | A 10-ETF universe is too small for these methods to show their designed advantage; equal weight is the mandatory control |
+| Equity-factor mechanisms | Residual momentum, long-horizon reversal, quality composite construction | [51](notebooks/51_equity_factor_momentum_reversal_quality.ipynb) | Sector ETFs are a coarse substitute for stock-level deciles, and the quality test uses published factor returns rather than holdings |
 
 ## 🧑‍🎓 Suggested beginner learning path
 
