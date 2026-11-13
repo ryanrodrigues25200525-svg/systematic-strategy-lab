@@ -56,6 +56,7 @@ flowchart LR
 | Portfolio capstone | Correlation, risk contribution, drawdown and benchmark context | [47](notebooks/47_capstone_multi_strategy_portfolio.ipynb) | Equal capital is a design choice, not an optimal allocation |
 | Research-quality audit | Timing, bootstrap uncertainty, parameter stability, factor exposure | [48](notebooks/48_backtest_quality_audit.ipynb) | The PBO-style cell is a warning proxy, not a formal PBO estimate |
 | Fundamentals | Historical stock-level profitability construction | [49](notebooks/49_stock_level_profitability_factor.ipynb) | Published factor data does not expose holdings, borrow, or exact turnover |
+| Risk-based allocation | Covariance shrinkage, equal risk contribution, hierarchical clustering, maximum diversification | [50](notebooks/50_risk_based_allocation.ipynb) | A 10-ETF universe is too small for these methods to show their designed advantage; equal weight is the mandatory control |
 
 ## 🧑‍🎓 Suggested beginner learning path
 

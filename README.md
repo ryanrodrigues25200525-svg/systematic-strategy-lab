@@ -29,8 +29,8 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 49 runnable notebooks |
-| Automated tests | 14 passing tests |
+| Research notebooks | 50 runnable notebooks |
+| Automated tests | 25 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
 | Default cost | 10 basis points per unit of absolute exposure change |
@@ -65,6 +65,7 @@ Then explore the fund research:
 - [X/Twitter strategy audit findings](TWITTER_STRATEGY_FINDINGS.md)
 - [New research-paper strategy findings](PAPER_STRATEGY_FINDINGS.md)
 - [Original strategy findings](ORIGINAL_STRATEGY_FINDINGS.md)
+- [Risk-based allocation findings](RISK_ALLOCATION_FINDINGS.md)
 - [Research map and beginner learning guide](RESEARCH_MAP.md)
 
 ---
@@ -185,6 +186,16 @@ These final notebooks turn the collection into a portfolio-ready research projec
 | Backtest-quality audit | [48 — Quality audit](notebooks/48_backtest_quality_audit.ipynb) | Look-ahead checks, bootstrap intervals, parameter stability, factor exposure, turnover/slippage, and a clearly labeled PBO-style warning proxy |
 | Stock-level profitability factor | [49 — Profitability factor](notebooks/49_stock_level_profitability_factor.ipynb) | Historical accounting-based RMW factor construction, point-in-time formation logic, cost scenarios, and limitations |
 
+### ⚖️ Risk-based allocation and covariance estimation
+
+These notebooks build portfolios from the covariance matrix rather than from return forecasts. They are the test of whether "risk parity" and "diversification" mean anything measurable once estimation error is on the table.
+
+| Allocator | Notebook | Question |
+| --- | --- | --- |
+| Covariance shrinkage, ERC, HRP, max diversification | [50 — Risk-based allocation](notebooks/50_risk_based_allocation.ipynb) | Does correlation-aware risk allocation beat equal weight and inverse volatility, and what does each method actually hold? |
+
+See [Risk-Based Allocation Findings](RISK_ALLOCATION_FINDINGS.md) for the test-period table, stress windows, and negative results.
+
 Use the [Research Map and Learning Guide](RESEARCH_MAP.md) to see how each anomaly connects to a source, rule, implementation, result, and limitation.
 
 ---
@@ -213,6 +224,7 @@ These are the latest formal-test observations from the standalone fund notebooks
 | Man AHL medium trend | Test Sharpe: **0.71** | Medium speed was more balanced in this sample than the fast or slow alternatives. |
 | Man AHL fast trend | Test Sharpe: **-0.15**; annualized turnover: **11.14** | Faster response can come with whipsaws and materially higher trading activity. |
 | Winton portable alpha | Test Sharpe: **0.80**; test drawdown: **-11.82%** | Adding an equity sleeve changed both return and crisis behavior versus trend alone. |
+| Risk-based allocation | Best covariance method: **0.65 Sharpe** versus **0.75** for equal weight | Estimation error, not the allocation formula, is often the binding constraint. |
 
 For the full tables, cost checks, and stress-window diagnostics, read [FUND_STRATEGY_FINDINGS.md](FUND_STRATEGY_FINDINGS.md), [EXTENDED_STRATEGY_FINDINGS.md](EXTENDED_STRATEGY_FINDINGS.md), and the individual notebooks.
 
@@ -264,7 +276,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–49 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, and fundamentals notebooks
+│   └── 12–24  fund strategy proxies; 25–50 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, and risk-allocation notebooks
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
@@ -272,6 +284,7 @@ systematic-strategy-lab/
 │   ├── metrics.py        consistent performance metrics
 │   ├── plots.py          reusable chart helpers
 │   ├── portfolio.py      portfolio weights and portfolio backtests
+│   ├── risk.py           covariance shrinkage, ERC, HRP, and diversification methods
 │   ├── research.py       chronological comparison helpers
 │   └── strategies.py     single-asset signal builders
 ├── scripts/

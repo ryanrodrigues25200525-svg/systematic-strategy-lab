@@ -8,6 +8,12 @@ import numpy as np
 import pandas as pd
 
 from .metrics import calculate_metrics
+from .risk import (
+    erc_weights,
+    hierarchical_risk_parity_weights_from_cov,
+    max_diversification_weights_from_cov,
+    shrink_covariance,
+)
 
 
 @dataclass(frozen=True)
@@ -493,6 +499,108 @@ def inverse_volatility_weights(
             inverse = 1.0 / valid
             candidates.loc[timestamp, inverse.index] = inverse / inverse.sum()
     return _rebalance_weights(panel.index, panel.columns, candidates).rename_axis(columns="asset")
+
+
+def _monthly_covariance_weights(
+    close: pd.DataFrame,
+    *,
+    lookback: int,
+    shrinkage: str,
+    solver,
+) -> pd.DataFrame:
+    """Apply a covariance-based solver at each month start without look-ahead.
+
+    ``history`` ends at the decision close, so the weights are known before the
+    next bar opens; ``run_portfolio_backtest`` then shifts them by one bar.
+    """
+
+    panel = _validate_panel(close)
+    returns = panel.pct_change()
+    candidates = pd.DataFrame(0.0, index=panel.index, columns=panel.columns)
+    for timestamp in panel.index[_month_start_mask(panel.index).to_numpy()]:
+        history = returns.loc[:timestamp].dropna(how="any").tail(lookback)
+        if len(history) < lookback:
+            continue
+        covariance = shrink_covariance(history, method=shrinkage)
+        weights = solver(covariance)
+        if not np.isfinite(weights.to_numpy()).all() or weights.abs().sum() <= 0.0:
+            continue
+        candidates.loc[timestamp, weights.index] = weights.to_numpy()
+    return _rebalance_weights(panel.index, panel.columns, candidates).rename_axis(columns="asset")
+
+
+def equal_risk_contribution_weights(
+    close: pd.DataFrame,
+    *,
+    lookback: int = 252,
+    shrinkage: str = "oas",
+) -> pd.DataFrame:
+    """Hold the equal-risk-contribution portfolio, rebuilt monthly.
+
+    Unlike inverse-volatility weighting, ERC accounts for correlations: every
+    asset contributes the same share of total portfolio variance. With a
+    diagonal covariance matrix the two methods coincide.
+    """
+
+    if lookback <= 1:
+        raise ValueError("lookback must exceed 1")
+    return _monthly_covariance_weights(close, lookback=lookback, shrinkage=shrinkage, solver=erc_weights)
+
+
+def hierarchical_risk_parity_weights(
+    close: pd.DataFrame,
+    *,
+    lookback: int = 252,
+    shrinkage: str = "oas",
+) -> pd.DataFrame:
+    """Hold the hierarchical risk parity portfolio, rebuilt monthly."""
+
+    if lookback <= 1:
+        raise ValueError("lookback must exceed 1")
+    return _monthly_covariance_weights(
+        close, lookback=lookback, shrinkage=shrinkage, solver=hierarchical_risk_parity_weights_from_cov
+    )
+
+
+def max_diversification_weights(
+    close: pd.DataFrame,
+    *,
+    lookback: int = 252,
+    shrinkage: str = "oas",
+) -> pd.DataFrame:
+    """Hold the long-only maximum-diversification portfolio, rebuilt monthly."""
+
+    if lookback <= 1:
+        raise ValueError("lookback must exceed 1")
+    return _monthly_covariance_weights(
+        close, lookback=lookback, shrinkage=shrinkage, solver=max_diversification_weights_from_cov
+    )
+
+
+def shrunk_minimum_variance_weights(
+    close: pd.DataFrame,
+    *,
+    lookback: int = 252,
+    shrinkage: str = "oas",
+) -> pd.DataFrame:
+    """Long-only minimum variance built on a shrunk instead of a sample covariance.
+
+    This is the direct control for ``minimum_variance_weights``: same rule, but
+    the covariance estimator changes. Any difference is therefore attributable
+    to estimation error rather than to the allocation formula.
+    """
+
+    if lookback <= 1:
+        raise ValueError("lookback must exceed 1")
+
+    def solver(covariance: pd.DataFrame) -> pd.Series:
+        values = covariance.to_numpy(dtype=float)
+        raw = np.clip(np.linalg.pinv(values) @ np.ones(len(values)), 0.0, None)
+        if raw.sum() <= 0.0:
+            raw = np.ones_like(raw)
+        return pd.Series(raw / raw.sum(), index=covariance.index)
+
+    return _monthly_covariance_weights(close, lookback=lookback, shrinkage=shrinkage, solver=solver)
 
 
 def run_portfolio_backtest(
