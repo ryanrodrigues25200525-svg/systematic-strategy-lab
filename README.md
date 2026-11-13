@@ -29,8 +29,8 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 54 runnable notebooks |
-| Automated tests | 54 passing tests |
+| Research notebooks | 55 runnable notebooks |
+| Automated tests | 56 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
 | Default cost | 10 basis points per unit of absolute exposure change |
@@ -70,6 +70,7 @@ Then explore the fund research:
 - [Macro regime findings](MACRO_REGIME_FINDINGS.md)
 - [Calendar effect findings](CALENDAR_EFFECTS_FINDINGS.md)
 - [Residual momentum stress test](RM_STRESS_TEST_FINDINGS.md)
+- [Surviving claims audit — the closing verdict](SURVIVING_CLAIMS_FINDINGS.md)
 - [Research map and beginner learning guide](RESEARCH_MAP.md)
 
 ---
@@ -240,6 +241,16 @@ One notebook attacks the strongest-looking result in the library until it breaks
 
 See [Residual Momentum Stress Test](RM_STRESS_TEST_FINDINGS.md) for the verdict: the 0.99 test-period Sharpe was a window, the return was market beta, and the best of a 12-configuration grid is indistinguishable from noise (p = 0.25).
 
+### 🕵️ Second falsification round: the winners
+
+The stress test killed the most exciting result. This notebook audits the four claims that survived it — and finds that the risk-allocation family's "alpha" is the term premium.
+
+| Deliverable | Notebook | What it demonstrates |
+| --- | --- | --- |
+| Surviving claims audit | [55 — Falsification round 2](notebooks/55_surviving_claims_audit.ipynb) | 33-year trend-gate audit, six-window bootstrap, cross-asset generality, and one- versus two-factor alpha attribution |
+
+See [Surviving Claims Findings](SURVIVING_CLAIMS_FINDINGS.md) for the closing verdict: the library contains one durable effect — equity and duration beta are real, and de-risking on trend buys drawdown reduction at a fair price.
+
 Use the [Research Map and Learning Guide](RESEARCH_MAP.md) to see how each anomaly connects to a source, rule, implementation, result, and limitation.
 
 ---
@@ -272,6 +283,8 @@ These are the latest formal-test observations from the standalone fund notebooks
 | Residual momentum | Initial test Sharpe **0.99** versus **0.61** — then failed its audit: alpha t = 1.12, beta-adjusted Sharpe -0.08, grid p = 0.25 | A test-window Sharpe ratio is the weakest form of evidence; decompose for beta and correct for the search. |
 | Macro regime filters | Credit filter **+0.95 Sharpe in 2007–2014** but **0.08 in 2022–2025** | A crisis detector is not an allocation rule; judge filters against their own unfiltered control. |
 | Calendar effects | Turn-of-month **+3.3 bps/day premium, t = 1.03**, and decimated by 24 units of turnover | A conditional mean is not an edge; costs scale with turnover, not with time invested. |
+| Trend gate vs buy & hold | Alpha **3.40%/yr (t = 2.13)** and drawdown **-25% vs -55%**, but it loses on return in 29 of 32 years and its grid p = 0.12 | Timing buys drawdown reduction; it does not beat a multiple-testing bar. |
+| ERC / equal weight "alpha" | 3.73%/yr (t = 2.88) becomes **1.83% (t = 1.93)** once duration is a second factor | Always ask *which* benchmark; a bond-heavy book looks skilful against equities alone. |
 
 For the full tables, cost checks, and stress-window diagnostics, read [FUND_STRATEGY_FINDINGS.md](FUND_STRATEGY_FINDINGS.md), [EXTENDED_STRATEGY_FINDINGS.md](EXTENDED_STRATEGY_FINDINGS.md), and the individual notebooks.
 
@@ -323,7 +336,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–54 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, risk-allocation, equity-factor, macro-regime, calendar, and falsification notebooks
+│   └── 12–24  fund strategy proxies; 25–55 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, risk-allocation, equity-factor, macro-regime, calendar, and falsification notebooks
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data

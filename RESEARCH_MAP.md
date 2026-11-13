@@ -61,6 +61,7 @@ flowchart LR
 | Macro regimes | Credit-leadership, term-structure and inflation rotation filters built from price ratios | [52](notebooks/52_macro_regime_signals.ipynb) | A price ratio is not a spread, a yield curve, or an inflation print; a filter must be judged against its own unfiltered control |
 | Calendar effects | Turn-of-month, pre-holiday, pre-FOMC and weekday masks with t-statistics | [53](notebooks/53_calendar_effects.ipynb) | Effects measured on one asset with daily closes; small samples give almost no power, and cash drag plus turnover usually dominate |
 | Falsification | Frozen-spec audit: walk-forward, asset dependence, alpha/beta, information coefficient, bootstrap reality check, deflated Sharpe | [54](notebooks/54_residual_momentum_stress_test.ipynb) | A negative result on a single 17-ETF universe is evidence about that universe; the reusable part is the audit, not the verdict |
+| Falsification, round 2 | Long-sample trend-gate audit, cross-asset generality, one- versus two-factor alpha attribution, deflated Sharpe on total vs beta-adjusted returns | [55](notebooks/55_surviving_claims_audit.ipynb) | Attribution is only as good as the benchmark set; a single-market regression makes a bond portfolio look skilful |
 
 ## 🧑‍🎓 Suggested beginner learning path
 

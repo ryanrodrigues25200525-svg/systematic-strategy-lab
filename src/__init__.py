@@ -19,6 +19,7 @@ from .calendar_effects import (
 from .data import load_price_data, load_price_panel, make_demo_ohlcv
 from .macro_regimes import (
     credit_regime_weights,
+    trend_gate_weights,
     inflation_rotation_weights,
     term_structure_tilt_weights,
 )
@@ -102,6 +103,7 @@ __all__ = [
     "deflated_sharpe_ratio",
     "stationary_block_bootstrap",
     "credit_regime_weights",
+    "trend_gate_weights",
     "day_of_week_mask",
     "nyse_holidays",
     "positions_from_return_mask",

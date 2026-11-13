@@ -230,3 +230,43 @@ def term_structure_tilt_weights(
         return {asset: 1.0 / len(duration) for asset in duration}
 
     return _allocate(close, decision)
+
+
+def trend_gate_weights(
+    close: pd.DataFrame,
+    *,
+    asset: str = "SPY",
+    defensive_assets: tuple[str, ...] = ("IEF",),
+    window: int = 200,
+) -> pd.DataFrame:
+    """Hold the asset while it trades above its own moving average, else defence.
+
+    This is the simplest regime rule in the library and the one that beat every
+    macro filter in notebook 52. Decisions are taken daily on the prior close, so
+    a completed bar cannot pull the average it is being compared against.
+
+    With one defensive asset the portfolio is always fully invested in either the
+    asset or the defence, which makes the result a clean statement about timing
+    rather than about cash management.
+    """
+
+    panel = _validate_panel(close)
+    asset = asset.upper()
+    defensive = [column for column in defensive_assets if column in panel.columns]
+    if asset not in panel.columns:
+        raise ValueError("asset must be a column of the price panel")
+    if not defensive:
+        raise ValueError("defensive_assets must overlap the price panel")
+    if window < 20:
+        # A two-day moving average is not a trend filter; refuse to pretend.
+        raise ValueError("window must be at least 20 trading days")
+
+    prior = panel[asset].shift(1)
+    above = prior > prior.rolling(window, min_periods=window).mean()
+    weights = pd.DataFrame(0.0, index=panel.index, columns=panel.columns)
+    weights.loc[above.fillna(False), asset] = 1.0
+    weights.loc[(~above).fillna(True), defensive] = 1.0 / len(defensive)
+    # Before the average exists, hold nothing rather than guess.
+    warmup = panel[asset].shift(1).rolling(window, min_periods=window).mean().isna()
+    weights.loc[warmup, :] = 0.0
+    return weights.rename_axis(columns="asset")

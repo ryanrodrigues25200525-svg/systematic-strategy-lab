@@ -136,3 +136,40 @@ def test_macro_regime_builders_reject_missing_assets_and_bad_parameters():
         except ValueError:
             continue
         raise AssertionError("Expected a ValueError for invalid macro-regime inputs")
+
+
+def test_trend_gate_holds_the_asset_above_its_average_and_defense_below_it():
+    from src.macro_regimes import trend_gate_weights
+
+    dates = pd.bdate_range("2015-01-01", periods=900)
+    up_then_down = np.concatenate([np.linspace(100.0, 200.0, 450), np.linspace(200.0, 90.0, 450)])
+    panel = pd.DataFrame(
+        {"SPY": up_then_down, "IEF": np.linspace(100.0, 110.0, 900)},
+        index=dates,
+    )
+    weights = trend_gate_weights(panel, asset="SPY", defensive_assets=("IEF",), window=100)
+
+    rising = weights.iloc[300:440]
+    falling = weights.iloc[600:890]
+    assert (rising["SPY"] > 0.99).all()
+    assert (falling["IEF"] > 0.99).all()
+    # Warm-up holds nothing; after the average exists the book is fully invested.
+    row_sums = weights.sum(axis=1)
+    live = row_sums[row_sums > 0.0]
+    assert len(live) == 900 - 100
+    assert np.allclose(live.to_numpy(), 1.0)
+
+    cutoff = dates[700]
+    truncated = trend_gate_weights(panel.loc[:cutoff], asset="SPY", defensive_assets=("IEF",), window=100)
+    pd.testing.assert_frame_equal(weights.loc[:cutoff], truncated)
+
+    for call in (
+        lambda: trend_gate_weights(panel, asset="MISSING"),
+        lambda: trend_gate_weights(panel, window=2),
+        lambda: trend_gate_weights(panel, defensive_assets=("MISSING",)),
+    ):
+        try:
+            call()
+        except ValueError:
+            continue
+        raise AssertionError("Expected invalid trend-gate inputs to fail")

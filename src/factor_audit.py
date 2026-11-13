@@ -126,38 +126,54 @@ def alpha_beta(
     returns: pd.Series,
     market: pd.Series,
     *,
+    extra_factors: pd.DataFrame | None = None,
     annualization: int = 252,
 ) -> dict[str, float]:
-    """Ordinary-least-squares alpha and beta with a t-statistic for alpha.
+    """Ordinary-least-squares alpha with betas on the market and any extra factors.
+
+    Extra factors answer the question a single-market regression cannot: *whose*
+    beta is this? An ERC portfolio that looks like it has alpha against SPY may
+    simply be holding duration, and one extra regressor settles it.
 
     The t-statistic is the plain OLS one, so it assumes homoskedastic,
     uncorrelated residuals. Treat it as a screening number, not inference: daily
-    strategy returns are usually heteroskedastic.
+    strategy returns are usually heteroskedastic, and a HAC correction would make
+    these t-statistics smaller.
     """
 
     strategy = pd.Series(returns, dtype=float)
     benchmark = pd.Series(market, dtype=float).reindex(strategy.index)
-    aligned = pd.concat([strategy.rename("strategy"), benchmark.rename("market")], axis=1).dropna()
+    columns = {"strategy": strategy, "market": benchmark}
+    if extra_factors is not None:
+        for column in extra_factors.columns:
+            columns[str(column)] = pd.Series(extra_factors[column], dtype=float).reindex(strategy.index)
+    aligned = pd.concat(columns, axis=1).dropna()
     if len(aligned) < 30:
         raise ValueError("Need at least 30 aligned observations for an alpha/beta estimate")
 
     y = aligned["strategy"].to_numpy()
-    x = aligned["market"].to_numpy()
-    design = np.column_stack([np.ones_like(x), x])
+    design = np.column_stack([np.ones(len(y)), aligned.drop(columns="strategy").to_numpy()])
     coefficients, *_ = np.linalg.lstsq(design, y, rcond=None)
     residuals = y - design @ coefficients
-    degrees_of_freedom = len(y) - 2
+    degrees_of_freedom = len(y) - design.shape[1]
+    if degrees_of_freedom <= 0:
+        raise ValueError("Not enough observations for the number of factors")
     residual_variance = float(residuals @ residuals / degrees_of_freedom)
     covariance = residual_variance * np.linalg.inv(design.T @ design)
-    alpha_daily, beta = float(coefficients[0]), float(coefficients[1])
+    alpha_daily = float(coefficients[0])
     alpha_standard_error = float(np.sqrt(covariance[0, 0]))
-    return {
+
+    result = {
         "alpha": alpha_daily * annualization,
-        "beta": beta,
+        "beta": float(coefficients[1]),
         "alpha_t_stat": alpha_daily / alpha_standard_error if alpha_standard_error > 0 else 0.0,
         "residual_volatility": float(np.sqrt(residual_variance) * np.sqrt(annualization)),
         "observations": float(len(y)),
     }
+    if extra_factors is not None:
+        for position, column in enumerate(aligned.columns[2:], start=2):
+            result[f"beta_{column}"] = float(coefficients[position])
+    return result
 
 
 def deflated_sharpe_ratio(

@@ -135,3 +135,21 @@ def test_deflated_sharpe_benchmark_matches_a_simulated_expected_maximum():
     assert deflated_sharpe_ratio(1.0, trials=200, n_observations=756) < 0.95
     # The same Sharpe with 2 trials and 10 years of data is.
     assert deflated_sharpe_ratio(1.0, trials=2, n_observations=2_520) > 0.95
+
+
+def test_alpha_beta_with_extra_factors_removes_a_second_beta():
+    rng = np.random.default_rng(9)
+    dates = pd.bdate_range("2010-01-01", periods=1_500)
+    equity = pd.Series(rng.normal(0.0003, 0.01, size=len(dates)), index=dates)
+    duration = pd.Series(rng.normal(0.0002, 0.006, size=len(dates)), index=dates)
+    strategy = 0.0001 + 0.3 * equity + 0.8 * duration + pd.Series(rng.normal(0.0, 0.001, size=len(dates)), index=dates)
+
+    single = alpha_beta(strategy, equity)
+    two_factor = alpha_beta(strategy, equity, extra_factors=duration.to_frame("TLT"))
+
+    # Single-market alpha is polluted by the duration exposure; the two-factor
+    # model must recover both betas and shrink the alpha towards its true value.
+    assert abs(two_factor["beta"] - 0.3) < 0.05
+    assert abs(two_factor["beta_TLT"] - 0.8) < 0.05
+    assert abs(two_factor["alpha"] - 0.0001 * 252) < 0.06
+    assert abs(two_factor["alpha"]) < abs(single["alpha"])
