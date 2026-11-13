@@ -8,6 +8,11 @@ from .backtest import (
     volatility_target_position,
 )
 from .data import load_price_data, load_price_panel, make_demo_ohlcv
+from .macro_regimes import (
+    credit_regime_weights,
+    inflation_rotation_weights,
+    term_structure_tilt_weights,
+)
 from .equity_factors import (
     cross_sectional_momentum_score,
     cross_sectional_momentum_weights_monthly,
@@ -73,6 +78,9 @@ __all__ = [
     "equal_risk_contribution_weights",
     "equal_weight_weights",
     "erc_weights",
+    "credit_regime_weights",
+    "inflation_rotation_weights",
+    "term_structure_tilt_weights",
     "cross_sectional_momentum_score",
     "cross_sectional_momentum_weights_monthly",
     "long_term_reversal_weights",

@@ -29,8 +29,8 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 51 runnable notebooks |
-| Automated tests | 32 passing tests |
+| Research notebooks | 52 runnable notebooks |
+| Automated tests | 38 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
 | Default cost | 10 basis points per unit of absolute exposure change |
@@ -67,6 +67,7 @@ Then explore the fund research:
 - [Original strategy findings](ORIGINAL_STRATEGY_FINDINGS.md)
 - [Risk-based allocation findings](RISK_ALLOCATION_FINDINGS.md)
 - [Equity factor findings](EQUITY_FACTOR_FINDINGS.md)
+- [Macro regime findings](MACRO_REGIME_FINDINGS.md)
 - [Research map and beginner learning guide](RESEARCH_MAP.md)
 
 ---
@@ -207,6 +208,16 @@ These notebooks test factor mechanisms the library did not yet cover: momentum e
 
 See [Equity Factor Findings](EQUITY_FACTOR_FINDINGS.md) for the residual-momentum result, the sign error that was caught, and the decaying quality premium.
 
+### 🌐 Macro regime signals
+
+These notebooks test whether credit, term-structure or inflation regime signals improve an allocation, and they always compare against the same rule with the macro filter removed.
+
+| Macro rule | Notebook | Question |
+| --- | --- | --- |
+| Credit regime, inflation rotation, term-structure tilt | [52 — Macro regime signals](notebooks/52_macro_regime_signals.ipynb) | Do credit, curve and inflation regime filters add anything over a bare momentum rule and a 200-day trend gate? |
+
+See [Macro Regime Findings](MACRO_REGIME_FINDINGS.md) for the subperiod table showing the credit filter is a crisis instrument rather than an allocation rule.
+
 Use the [Research Map and Learning Guide](RESEARCH_MAP.md) to see how each anomaly connects to a source, rule, implementation, result, and limitation.
 
 ---
@@ -236,7 +247,8 @@ These are the latest formal-test observations from the standalone fund notebooks
 | Man AHL fast trend | Test Sharpe: **-0.15**; annualized turnover: **11.14** | Faster response can come with whipsaws and materially higher trading activity. |
 | Winton portable alpha | Test Sharpe: **0.80**; test drawdown: **-11.82%** | Adding an equity sleeve changed both return and crisis behavior versus trend alone. |
 | Risk-based allocation | Best covariance method: **0.65 Sharpe** versus **0.75** for equal weight | Estimation error, not the allocation formula, is often the binding constraint. |
-| Residual momentum | Test Sharpe **0.91** versus **0.64** for plain 12–1 momentum, with 49% holding overlap | Removing market beta from a momentum signal changes which stocks it holds, not just how much risk it takes. |
+| Residual momentum | Test Sharpe **0.99** versus **0.61** for plain 12–1 momentum, with 49% holding overlap | Removing market beta from a momentum signal changes which stocks it holds, not just how much risk it takes. |
+| Macro regime filters | Credit filter **+0.95 Sharpe in 2007–2014** but **0.08 in 2022–2025** | A crisis detector is not an allocation rule; judge filters against their own unfiltered control. |
 
 For the full tables, cost checks, and stress-window diagnostics, read [FUND_STRATEGY_FINDINGS.md](FUND_STRATEGY_FINDINGS.md), [EXTENDED_STRATEGY_FINDINGS.md](EXTENDED_STRATEGY_FINDINGS.md), and the individual notebooks.
 
@@ -288,7 +300,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–51 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, risk-allocation, and equity-factor notebooks
+│   └── 12–24  fund strategy proxies; 25–52 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, risk-allocation, equity-factor, and macro-regime notebooks
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
@@ -296,6 +308,7 @@ systematic-strategy-lab/
 │   ├── metrics.py        consistent performance metrics
 │   ├── plots.py          reusable chart helpers
 │   ├── equity_factors.py residual momentum, long-horizon reversal, quality composite
+│   ├── macro_regimes.py  credit, term-structure, and inflation regime rules
 │   ├── portfolio.py      portfolio weights and portfolio backtests
 │   ├── risk.py           covariance shrinkage, ERC, HRP, and diversification methods
 │   ├── research.py       chronological comparison helpers

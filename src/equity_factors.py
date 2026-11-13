@@ -21,7 +21,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from .portfolio import _validate_panel
+from .portfolio import _month_start_mask, _validate_panel
 
 
 def _month_end_panel(close: pd.DataFrame) -> pd.DataFrame:
@@ -39,7 +39,11 @@ def _decide_at_month_start(monthly_weights: pd.DataFrame, daily_index: pd.Dateti
     return that produced it.
     """
 
-    daily = monthly_weights.reindex(daily_index, method="ffill").fillna(0.0)
+    starts = daily_index[_month_start_mask(daily_index).to_numpy()]
+    # Align each month-end decision to the next month start, so the recorded
+    # target date matches the date the exposure is actually allowed to change.
+    decided = monthly_weights.reindex(monthly_weights.index.union(starts)).ffill().reindex(starts)
+    daily = decided.reindex(daily_index, method="ffill").fillna(0.0)
     return daily.astype(float)
 
 
