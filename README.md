@@ -29,8 +29,8 @@ The goal is not to find one magical strategy. The goal is to build sound researc
 
 | Component | Current implementation |
 | --- | --- |
-| Research notebooks | 53 runnable notebooks |
-| Automated tests | 45 passing tests |
+| Research notebooks | 54 runnable notebooks |
+| Automated tests | 54 passing tests |
 | Data | Adjusted Yahoo Finance prices, with deterministic offline demo fallback |
 | Execution model | Signal at `t` earns returns from `t + 1` |
 | Default cost | 10 basis points per unit of absolute exposure change |
@@ -69,6 +69,7 @@ Then explore the fund research:
 - [Equity factor findings](EQUITY_FACTOR_FINDINGS.md)
 - [Macro regime findings](MACRO_REGIME_FINDINGS.md)
 - [Calendar effect findings](CALENDAR_EFFECTS_FINDINGS.md)
+- [Residual momentum stress test](RM_STRESS_TEST_FINDINGS.md)
 - [Research map and beginner learning guide](RESEARCH_MAP.md)
 
 ---
@@ -229,6 +230,16 @@ These notebooks test effects that live on the calendar: the turn-of-month window
 
 See [Calendar Effect Findings](CALENDAR_EFFECTS_FINDINGS.md) for the per-day statistics, the tradeable versions, and the decay evidence.
 
+### 🧪 Falsification and research integrity
+
+One notebook attacks the strongest-looking result in the library until it breaks, and leaves the tooling behind so the next candidate can be attacked the same way.
+
+| Deliverable | Notebook | What it demonstrates |
+| --- | --- | --- |
+| Residual momentum stress test | [54 — Residual momentum stress test](notebooks/54_residual_momentum_stress_test.ipynb) | Frozen specification, yearly walk-forward, drop-the-winners, alpha/beta decomposition, rank information coefficient, block-bootstrap reality check, and the deflated Sharpe ratio |
+
+See [Residual Momentum Stress Test](RM_STRESS_TEST_FINDINGS.md) for the verdict: the 0.99 test-period Sharpe was a window, the return was market beta, and the best of a 12-configuration grid is indistinguishable from noise (p = 0.25).
+
 Use the [Research Map and Learning Guide](RESEARCH_MAP.md) to see how each anomaly connects to a source, rule, implementation, result, and limitation.
 
 ---
@@ -258,7 +269,7 @@ These are the latest formal-test observations from the standalone fund notebooks
 | Man AHL fast trend | Test Sharpe: **-0.15**; annualized turnover: **11.14** | Faster response can come with whipsaws and materially higher trading activity. |
 | Winton portable alpha | Test Sharpe: **0.80**; test drawdown: **-11.82%** | Adding an equity sleeve changed both return and crisis behavior versus trend alone. |
 | Risk-based allocation | Best covariance method: **0.65 Sharpe** versus **0.75** for equal weight | Estimation error, not the allocation formula, is often the binding constraint. |
-| Residual momentum | Test Sharpe **0.99** versus **0.61** for plain 12–1 momentum, with 49% holding overlap | Removing market beta from a momentum signal changes which stocks it holds, not just how much risk it takes. |
+| Residual momentum | Initial test Sharpe **0.99** versus **0.61** — then failed its audit: alpha t = 1.12, beta-adjusted Sharpe -0.08, grid p = 0.25 | A test-window Sharpe ratio is the weakest form of evidence; decompose for beta and correct for the search. |
 | Macro regime filters | Credit filter **+0.95 Sharpe in 2007–2014** but **0.08 in 2022–2025** | A crisis detector is not an allocation rule; judge filters against their own unfiltered control. |
 | Calendar effects | Turn-of-month **+3.3 bps/day premium, t = 1.03**, and decimated by 24 units of turnover | A conditional mean is not an edge; costs scale with turnover, not with time invested. |
 
@@ -312,7 +323,7 @@ systematic-strategy-lab/
 ├── notebooks/
 │   ├── 01–07  foundation and paper-replication notebooks
 │   ├── 08–11  fund comparison overview notebooks
-│   └── 12–24  fund strategy proxies; 25–53 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, risk-allocation, equity-factor, macro-regime, and calendar notebooks
+│   └── 12–24  fund strategy proxies; 25–54 extended paper, hedge-fund, Reddit, X/Twitter, research-paper, original, capstone, audit, fundamentals, risk-allocation, equity-factor, macro-regime, calendar, and falsification notebooks
 ├── src/
 │   ├── backtest.py       single-asset backtesting and execution timing
 │   ├── data.py           Yahoo Finance loader and deterministic demo data
@@ -321,6 +332,7 @@ systematic-strategy-lab/
 │   ├── plots.py          reusable chart helpers
 │   ├── equity_factors.py residual momentum, long-horizon reversal, quality composite
 │   ├── calendar_effects.py turn-of-month, holiday, FOMC, and weekday masks
+│   ├── factor_audit.py   bootstrap, beta decomposition, deflated Sharpe
 │   ├── macro_regimes.py  credit, term-structure, and inflation regime rules
 │   ├── portfolio.py      portfolio weights and portfolio backtests
 │   ├── risk.py           covariance shrinkage, ERC, HRP, and diversification methods

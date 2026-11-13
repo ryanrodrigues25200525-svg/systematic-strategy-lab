@@ -4,6 +4,10 @@ This batch adds three equity-factor rules that are distinct from the 12–1 mome
 
 > Educational research only. Not financial advice. Historical results are not guarantees of future performance.
 
+> ## ⚠️ Correction (added after publication)
+>
+> The residual-momentum result below did **not** survive a follow-up stress test. [Notebook 54](notebooks/54_residual_momentum_stress_test.ipynb) shows that its 0.99 test Sharpe is the best of five subperiods, that its full-sample return is market beta (alpha t = 1.12, beta-adjusted Sharpe -0.08), that its rank information coefficient is -0.016, that dropping the three best-performing assets removes the edge (0.84 vs 0.86), and that the best of the 12-configuration grid is unremarkable against a bootstrap null (p = 0.25; deflated Sharpe 0.60 at 12 trials). Read the table below as the *initial* result and [RM_STRESS_TEST_FINDINGS.md](RM_STRESS_TEST_FINDINGS.md) as the verdict. The holding-overlap finding (49% of holdings differ) stands; the return claim does not.
+
 ## 📊 Results at a glance
 
 Test period 2022-03-30 to 2025-12-31, 18-asset ETF panel, 10 bps costs, monthly rebalancing.
@@ -28,7 +32,7 @@ Quality composite (Fama–French monthly factors, 1963-07 to 2026-09, gross):
 
 ## 🧠 What the results suggest
 
-- **Residual momentum is a different signal, not a relabelled one.** Mean Jaccard overlap with the plain 12–1 book is 0.49, market beta falls from 0.71 to 0.63, and correlation to SPY falls from 0.80 to 0.75. That is the mechanism the paper proposes: strip the beta-driven part of momentum, and some of the crash exposure goes with it.
+- **Residual momentum is a different signal, not a relabelled one.** Mean Jaccard overlap with the plain 12–1 book is 0.49, market beta falls from 0.71 to 0.63, and correlation to SPY falls from 0.80 to 0.75. *That part holds under audit — but the conclusion that it therefore earns a better return does not: see the correction above.*
 - **The improvement is not stable across splits.** Residual momentum's training-period Sharpe (0.41) was *below* plain momentum's (0.47); the advantage appears in validation and test. All 12 parameter pairs in the grid beat plain momentum, with the 11-month signal window the strongest column — but that grid was read after the test period was known, so it says the result is robust to parameters, not that it is out of sample. Treat it as a hypothesis.
 - **Warm-up is not protection.** Residual momentum needs 36 months of regressions plus 12 months of signal, so its first live date is 2011-04-01. Its 0.00% return in the 2008 window is an empty portfolio. The notebook reports a common-start comparison from that date for exactly this reason.
 - **Long/short equity momentum lost money in this sample.** Both long/short variants had negative test Sharpe ratios (-0.13 and -0.05), and reversal long/short lost 6.07% a year. Shorting weak sectors through a 2022–2025 bull market costs money regardless of signal quality, and the short leg is where borrow and squeeze risk live.

@@ -22,6 +22,14 @@ from .macro_regimes import (
     inflation_rotation_weights,
     term_structure_tilt_weights,
 )
+from .factor_audit import (
+    alpha_beta,
+    annualized_sharpe,
+    beta_adjusted_returns,
+    bootstrap_pvalue,
+    deflated_sharpe_ratio,
+    stationary_block_bootstrap,
+)
 from .equity_factors import (
     cross_sectional_momentum_score,
     cross_sectional_momentum_weights_monthly,
@@ -87,6 +95,12 @@ __all__ = [
     "equal_risk_contribution_weights",
     "equal_weight_weights",
     "erc_weights",
+    "alpha_beta",
+    "annualized_sharpe",
+    "beta_adjusted_returns",
+    "bootstrap_pvalue",
+    "deflated_sharpe_ratio",
+    "stationary_block_bootstrap",
     "credit_regime_weights",
     "day_of_week_mask",
     "nyse_holidays",

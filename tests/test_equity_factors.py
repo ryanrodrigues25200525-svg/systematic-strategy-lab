@@ -150,3 +150,24 @@ def test_equity_factor_builders_reject_invalid_parameters():
         except ValueError:
             continue
         raise AssertionError("Expected a ValueError for an invalid parameter")
+
+
+def test_residual_momentum_score_drives_the_weights():
+    from src.equity_factors import residual_momentum_score
+
+    panel = _monthly_universe()
+    score = residual_momentum_score(panel, market_asset="BETA", regression_window=24, signal_window=6)
+    weights = residual_momentum_weights(panel, market_asset="BETA", regression_window=24, signal_window=6, top_n=2)
+
+    assert "BETA" not in score.columns
+    # At every month-start decision the held assets must be the score's top two.
+    decisions = weights.index[weights.diff().abs().sum(axis=1) > 1e-9]
+    matched = 0
+    for timestamp in decisions:
+        month_end = score.index[score.index <= timestamp]
+        if len(month_end) == 0:
+            continue
+        top = score.loc[month_end[-1]].dropna().nlargest(2).index
+        held = weights.loc[timestamp][weights.loc[timestamp] > 0].index
+        matched += int(set(top) == set(held))
+    assert matched >= 0.8 * len(decisions)

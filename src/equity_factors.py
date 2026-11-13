@@ -82,6 +82,45 @@ def _select_extremes(
     return weights
 
 
+def residual_momentum_score(
+    close: pd.DataFrame,
+    *,
+    market_asset: str = "SPY",
+    regression_window: int = 36,
+    signal_window: int = 11,
+    skip_recent: int = 1,
+) -> pd.DataFrame:
+    """Monthly residual-momentum score, one row per month end.
+
+    Exposed separately from :func:`residual_momentum_weights` so the signal can be
+    tested on its own — an information-coefficient test does not depend on how many
+    assets the portfolio holds, which makes it a cleaner check than a 3-asset book.
+    """
+
+    panel = _validate_panel(close)
+    market_asset = market_asset.upper()
+    if market_asset not in panel.columns:
+        raise ValueError("market_asset must be a column of the price panel")
+    if regression_window < 12:
+        raise ValueError("regression_window must be at least 12 months")
+    if signal_window < 2 or skip_recent < 0 or signal_window + skip_recent > regression_window:
+        raise ValueError("signal_window and skip_recent must fit inside regression_window")
+
+    monthly = _month_end_panel(panel)
+    monthly_returns = monthly.pct_change()
+    market = monthly_returns[market_asset]
+    market_variance = market.rolling(regression_window).var(ddof=1)
+
+    scores = pd.DataFrame(index=monthly_returns.index, columns=[c for c in panel.columns if c != market_asset], dtype=float)
+    for asset in scores.columns:
+        covariance = monthly_returns[asset].rolling(regression_window).cov(market)
+        beta = covariance / market_variance
+        residual = monthly_returns[asset] - beta * market
+        window = residual.shift(skip_recent).rolling(signal_window)
+        scores[asset] = window.sum() / window.std(ddof=1)
+    return scores
+
+
 def residual_momentum_weights(
     close: pd.DataFrame,
     *,
@@ -109,30 +148,16 @@ def residual_momentum_weights(
     """
 
     panel = _validate_panel(close)
-    market_asset = market_asset.upper()
-    if market_asset not in panel.columns:
-        raise ValueError("market_asset must be a column of the price panel")
-    if regression_window < 12:
-        raise ValueError("regression_window must be at least 12 months")
-    if signal_window < 2 or skip_recent < 0 or signal_window + skip_recent > regression_window:
-        raise ValueError("signal_window and skip_recent must fit inside regression_window")
     if top_n <= 0 or top_n > len(panel.columns) - 1:
         raise ValueError("top_n must be positive and smaller than the investable universe")
     _validate_shares(long_share, short_share, bottom_n)
-
-    monthly = _month_end_panel(panel)
-    monthly_returns = monthly.pct_change()
-    market = monthly_returns[market_asset]
-    candidates = [column for column in panel.columns if column != market_asset]
-
-    market_variance = market.rolling(regression_window).var(ddof=1)
-    scores = pd.DataFrame(index=monthly_returns.index, columns=candidates, dtype=float)
-    for asset in candidates:
-        covariance = monthly_returns[asset].rolling(regression_window).cov(market)
-        beta = covariance / market_variance
-        residual = monthly_returns[asset] - beta * market
-        window = residual.shift(skip_recent).rolling(signal_window)
-        scores[asset] = window.sum() / window.std(ddof=1)
+    scores = residual_momentum_score(
+        panel,
+        market_asset=market_asset,
+        regression_window=regression_window,
+        signal_window=signal_window,
+        skip_recent=skip_recent,
+    )
 
     monthly_weights = _select_extremes(
         scores, top_n=top_n, bottom_n=bottom_n, long_share=long_share, short_share=short_share
